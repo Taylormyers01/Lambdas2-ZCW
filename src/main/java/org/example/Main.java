@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class Main {
@@ -13,16 +14,24 @@ public class Main {
     static ArrayList<Person> people = new ArrayList<>();
 
     public static void main(String[] args) {
-        for(int i = 0; i < 100; i++){
+        for(int i = 0; i < 10; i++){
             people.add(randomPersonGen());
         }
-//        Stream.of(people).forEach(System.out::print);
-
-
-//        CheckPerson tester = (p) -> p.getAge() < 40;
-//        printPersons(people, tester);
+        CheckPerson p1 = new CheckPerson() {
+            @Override
+            public boolean test(Person p) {
+                if(p.getAge() > 40 && p.gender == Person.Sex.FEMALE){
+                    return true;
+                }
+                return false;
+            }
+        };
+        CheckPerson check = p -> p.getAge() > 40 && p.gender == Person.Sex.FEMALE;
+        Person.printPersons(people, p1);
+        Person.printPersons(people, check);
+        Predicate<Person> check2 = p -> p.getAge() > 40 && p.gender == Person.Sex.FEMALE;
         people.stream().filter(p -> p.getAge() > 40 && p.gender == Person.Sex.FEMALE).forEach(System.out::println);
-
+        people.stream().filter(check2).forEach(System.out::println);
     }
 
     private static Person randomPersonGen(){
@@ -34,11 +43,5 @@ public class Main {
        return r.nextInt(maxNum);
     }
 
-    public static void printPersons(ArrayList<Person> roster, CheckPerson tester) {
-        for (Person p : roster) {
-            if (tester.test(p)) {
-                p.printPerson();
-            }
-        }
-    }
+
 }

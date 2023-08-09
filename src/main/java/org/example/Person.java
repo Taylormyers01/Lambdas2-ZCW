@@ -2,6 +2,7 @@ package org.example;
 
 import java.time.LocalDate;
 import java.time.Period;
+import java.util.ArrayList;
 
 public class Person {
     public enum Sex {
@@ -38,5 +39,13 @@ public class Person {
 
     public void printPerson(){
         System.out.println(this);
+    }
+
+    public static void printPersons(ArrayList<Person> roster, CheckPerson tester) {
+        for (Person p : roster) {
+            if (tester.test(p)) {
+                p.printPerson();
+            }
+        }
     }
 }
